@@ -5,15 +5,10 @@ This is the source code for the first part , the rest of the code will be upload
 ## Youtube Links
 Part 1 : https://youtu.be/XERS3j3hx_8
 
-## Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
+cd into backEnd and run "npm run dev" this script will start both the backend and the front end
 
-In the project directory, you can run:
-
-### `npm start`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
