@@ -3,9 +3,11 @@ import styles from "../styles/authComponents/Auth.module.scss";
 import MainContainer from "../components/Containers/MainContainer";
 import { Title } from "../components/Titles/Titles";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 import { useLoginUser, useRegisterUser } from "../queries/user";
+import { Navigate, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthProvider";
 
 const Auth = () => {
   //LOGIN
@@ -14,6 +16,12 @@ const Auth = () => {
   //REGISTER
   const [regEmail, setRegEmail] = useState("");
   const [regPw, setRegPw] = useState("");
+
+  //CONTEXT
+  const { auth, setAuth } = useContext(AuthContext);
+
+  //navigate
+  const navigate = useNavigate();
 
   let body = {
     email: email,
@@ -38,6 +46,10 @@ const Auth = () => {
     error: registerErr,
   } = useRegisterUser();
 
+  useEffect(() => {
+    if (auth) navigate("/");
+  });
+
   return (
     <MainContainer>
       {/* LOGIN */}
@@ -60,7 +72,18 @@ const Auth = () => {
           />
 
           {/* LOGIN BTN */}
-          <button>Login Now</button>
+          <button
+            onClick={() =>
+              loginHandler(body, {
+                onError: () => {
+                  console.log(loginErr);
+                },
+                onSuccess: () => setAuth(true),
+              })
+            }
+          >
+            Login Now
+          </button>
         </div>
       </form>
 
@@ -88,8 +111,35 @@ const Auth = () => {
           />
 
           {/* REGISTER BTN */}
-          <button onClick={() => registerHandler(regBody)}>Register Now</button>
+          <button
+            onClick={() =>
+              registerHandler(regBody, {
+                //ONSUCCESS USE LOGINHANDLER
+                onSuccess: () => {
+                  loginHandler(regBody, {
+                    onSuccess: () => setAuth(true),
+                    onError: () => {
+                      console.log(loginErr);
+                    },
+                  });
+                },
+              })
+            }
+          >
+            Register Now
+          </button>
           {/* ADD ERROR */}
+          {registerError && (
+            <div style={{ color: "red", marginTop: "2rem" }}>
+              {registerErr.response.data.map((err, index) => {
+                return (
+                  <div
+                    key={index}
+                  >{`${err.instancePath} : ${err.message}`}</div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </form>
     </MainContainer>
