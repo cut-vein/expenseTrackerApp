@@ -1,9 +1,10 @@
 # ExpenseTrackerApp
-This is the source code for the second part , the rest of the code will be uploaded as I upload the next parts.
+This is the source code for the 3 parts , the rest of the code will be uploaded as I upload the next parts.
 
 ## Youtube Links
 Part 1 : https://youtu.be/XERS3j3hx_8 \
-Part 2 : https://youtu.be/tGv9q1YgWF0
+Part 2 : https://youtu.be/tGv9q1YgWF0 \
+Part 3 : https://youtu.be/KWj5IW_tDa8 
 
 ## STEPS
 First of all cd into frontEnd , then to backend and do "npm i" into both folders to install node modules\
