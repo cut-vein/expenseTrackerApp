@@ -18,7 +18,7 @@ module.exports = function (session) {
     }
 
     async get(sid, cb) {
-      console.log("Prisma Store Get {Prisma Store}");
+      // console.log("Get Session {Prisma Store}");
       let sess;
       try {
         sess = await this.client.session.findUnique({
@@ -47,7 +47,7 @@ module.exports = function (session) {
     }
 
     async set(sid, sess, cb) {
-      console.log("Prisma Store Set");
+      console.log("Creating A Session {Prisma Store}");
       let now = new Date();
       let expires = new Date(now.valueOf() + this.ttl);
       let sessionString;
@@ -85,7 +85,7 @@ module.exports = function (session) {
     }
 
     async destroy(sid, cb) {
-      console.log("Prisma Store Destroy");
+      console.log("Destroy The Session {Prisma Store}");
       try {
         await this.client.session.delete({
           where: { sid },
@@ -97,7 +97,46 @@ module.exports = function (session) {
       if (cb) cb(null);
     }
 
-    //todo async touch(sid , sess , cb)
+    async touch(sid, sess, cb) {
+      // console.log("Touch The Session {Prisma Store}");
+      let now = new Date();
+      let expires = new Date(now.valueOf() + this.ttl);
+      let existingSess;
+      // console.log(expires);
+      try {
+        existingSess = await this?.client.session.findUnique({
+          where: { sid },
+        });
+
+        if (existingSess !== null) {
+          let existingSessData = {
+            ...this.serializer.parse(existingSess?.data),
+            cookie: sess.cookie,
+          };
+
+          // console.log(existingSessData);
+          // console.log();
+
+          try {
+            await this.client.session.update({
+              where: {
+                sid: existingSess?.sid,
+              },
+              data: {
+                expires: expires,
+                data: this.serializer.stringify(existingSessData),
+              },
+            });
+          } catch (e) {
+            console.log(e);
+          }
+        }
+
+        if (cb) cb(null);
+      } catch (e) {
+        console.log("Touch ERROR {Prisma Store}");
+      }
+    }
   }
   return PrismaStore;
 };
