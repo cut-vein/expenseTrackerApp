@@ -19,7 +19,7 @@ const AddTransactionForm = () => {
 
   const { data: ctgs } = useCategoriesGet();
   useEffect(() => {
-    if (ctgs) setCategory(ctgs.data[0].id);
+    if (ctgs) setCategory(ctgs?.data[0].id);
     else setCategory(1);
   }, [ctgs]);
 
