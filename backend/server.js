@@ -19,9 +19,16 @@ const PrismaStore = require("./lib/index")(session);
 app.use(express.static(path.join(__dirname, "client")));
 
 //CORS
+//ADD YOUR URL HERE
 app.use(
   cors({
-    origin: ["http://localhost:3006", "https://localhost:5000"],
+    origin: [
+      "http://localhost:3006",
+      "https://localhost:5000",
+      "http://expensetracker20:5000",
+      "https://expensetracker20:5000",
+      "https://expensetracker20",
+    ],
     methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD", "DELETE", "PATCH"],
     credentials: true,
   })
